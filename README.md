@@ -43,7 +43,7 @@ Here we list the standard procedures for data calibration
 
 <img align="right" width="250" src="demo/dialog_fitting.png"> The first step of data calibration is usually Gaussian fitting, which is sensible as the observing targets are mostly 'point-like' to the antenna beam. The equation applied for the fitting is a combination of multiple-peak Gaussian and a linear function, i.e.,
 
-$F(x)=\sum_{i=0}^N A_i\cdot e^{4\cdot ln2\frac{-(x-X_0) (2}{H^2}} + K\cdot x + B$         (Eq. 1)
+$$F(x)=\sum_{i=0}^N A_i\cdot e^{4\cdot ln2\frac{-(x-X_0) (2}{H^2}} + K\cdot x + B$$         (Eq. 1)
 
 This is essentially powerful to minimize the influence of source confusion (or side lobe) and baseline drifting. 
 
