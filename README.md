@@ -52,7 +52,7 @@ This is essentially powerful to minimize the influence of source confusion (or s
   - `Fit`: the location of the Gaussian fitted ascii results (click `Browse` to locate it)
 
 - parameter setup
-  - `Amplitude`: initial guess of amplitude (<img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1)
+- `Amplitude`: initial guess of amplitude (<img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1)
   - `Offset`: initial guess of offset (<img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> in Eq. 1)
   - `HPBW`: initial guess for antenna beam width (<img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> in Eq. 1)
   - `Tcal`: initial guess for baseline interception (<img src="https://render.githubusercontent.com/render/math?math=\rm{B}"> In Eq. 1), equivalent to the strength of injected noise diode in Kelven
@@ -61,18 +61,18 @@ This is essentially powerful to minimize the influence of source confusion (or s
   - `Channel`: stokes (R, L, RL, LR) or their combinations (e.g., `0.55*R+0.45*L`)
   - `De-Noise`: factor (<img src="https://render.githubusercontent.com/render/math?math=n">) controlling the strength of data smoothing. If $n\neq 0$, the data is smoothed regressively with  piecewise cubic spline algorithm, data points over <img src="https://render.githubusercontent.com/render/math?math=n\times rms"> are filtered. The lower value of <img src="https://render.githubusercontent.com/render/math?math=n"> the stronger smoothing. It is recommended that <img src="https://render.githubusercontent.com/render/math?math=n\geq 3"> even if strong smoothing is needed.
   - `Data Cut`: Restricts the range of the Gaussian fit in scanning direction on the left and right. By default both values are 0.1, which means that 10% of data are reduced in both sides.
-  - `Window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0\pm \rm{n}\cdot \rm{H}">, where <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0">and <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> are the offset and HPBW from Gaussian fitting, respectively .
+  - `window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0\pm \rm{n}\cdot \rm{H}">, where <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> and <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> are the offset and HPBW from Gassian fitting, respectively.
   - `Scan Num.` starting and ending scans to be fitted.
-
 - buttons
 
   - `browse`: locates raw FITS or fit format files
+  - `Cancel`: cancel the settings and close the fitting dialog
 
-- - `Cancel`: cancel the settings and close the fitting dialog
   - `Reset`: reset the fitting parameters
   - `Go`: start Gaussian fitting
 
   
+
 
 ### pointing correction
 
