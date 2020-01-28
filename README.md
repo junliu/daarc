@@ -12,12 +12,12 @@ DAACR provides an end-to-end solution for radio continuum data from single dish 
 
 Dependence:
 
-- numpy and scipy
-- ppgplot
-- astropy
-- ephem
-- wx
-- pubsub
+- [numpy and scipy](https://www.scipy.org/scipylib/download.html)
+- [ppgplot](https://www.github.com/junliu/ppgplot/)
+- [astropy](https://www.astropy.org/)
+- [ephem](https://pypi.org/project/ephem/)
+- [wx](https://wxpython.org/)
+- [pubsub](https://github.com/schollii/pypubsub)
 
 
 
@@ -37,34 +37,36 @@ Installation:
 
 ## standard data calibration procedures
 
-Here we list the standard procedures for data calibration
+Here the standard procedures for data calibration are listed.
 
 ### Gaussian fitting
 
  The first step of data calibration is usually Gaussian fitting, which is sensible as the observing targets are mostly 'point-like' to the antenna beam. The equation applied for the fitting is a combination of multiple-peak Gaussian and a linear function, i.e.,
 
-<img src="https://render.githubusercontent.com/render/math?math=F(x)=\sum_{i=0}^N A_i\cdot e^{4\cdot ln2\frac{-(x-X_0)^2}{H^2}} + K\cdot x %2B B\quad       (Eq.\,\, 1)">
+<img src="https://render.githubusercontent.com/render/math?math=F(x)=\sum_{i=0}^N A_i\cdot e^{4\cdot ln2\frac{-(x-X_0)^2}{H^2}} + K\cdot x %2B B\quad\quad\quad(\rm{Eq}.\,\, 1)">
 
 This is essentially powerful to minimize the influence of source confusion (or side lobe) and baseline drifting. <img align="right" width="265" src="demo/dialog_fitting.png">
 
 - data location:
-  - `Raw`: the location of raw FITS data (use `Browse` to locate it)
-  - `Fit`: the location of the Gaussian fitted ascii results (use `Browse` to locate it)
+  - `Raw`: the location of raw FITS data (click `Browse` to locate it)
+  - `Fit`: the location of the Gaussian fitted ascii results (click `Browse` to locate it)
 
 - parameter setup
-  - `Amplitude`: initial guess of amplitude (A in Eq. 1)
-  - `Offset`: initial guess of offset (X0​ in Eq. 1)
-  - `HPBW`: initial guess for antenna beam width (H​ in Eq. 1)
-  - `Tcal`: the strength of noise diode in Kelven
-  - `Num. of Peaks`: the number of Gaussian functions (N​ in Eq. 1)
+  - `Amplitude`: initial guess of amplitude (<img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1)
+  - `Offset`: initial guess of offset (<img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> in Eq. 1)
+  - `HPBW`: initial guess for antenna beam width (<img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> in Eq. 1)
+  - `Tcal`: initial guess for baseline interception (<img src="https://render.githubusercontent.com/render/math?math=\rm{B}"> In Eq. 1), equivalent to the strength of injected noise diode in Kelven
+  - `Num. of Peaks`: the number of Gaussians (<img src="https://render.githubusercontent.com/render/math?math=\rm{N}"> in Eq. 1)
   - `Baseline Order`: the order of baseline. By default a linear function is fitted to the baseline. Higher order of baseline is possible, however this is in priciple not expected for a sub-scan, and may introduce over fitting.
-  - `Channel`: stokes (R, L, RL, LR) or their combinations (e.g., 0.6\*R + 0.4\*L)
-  - `De-Noise`: factor (n) controlling the strength of data smoothing. If $n\neq 0$, the data is smoothed regressively with  piecewise cubic spline algorithm, data points over n times the rms are filtered. The larger n the less smoothing. Typical value of n is higher than 3 even if smoothing is needed.
+  - `Channel`: stokes (R, L, RL, LR) or their combinations (e.g., `0.55*R+0.45*L`)
+  - `De-Noise`: factor (<img src="https://render.githubusercontent.com/render/math?math=n">) controlling the strength of data smoothing. If $n\neq 0$, the data is smoothed regressively with  piecewise cubic spline algorithm, data points over <img src="https://render.githubusercontent.com/render/math?math=n\times rms"> are filtered. The lower value of <img src="https://render.githubusercontent.com/render/math?math=n"> the stronger smoothing. It is recommended that <img src="https://render.githubusercontent.com/render/math?math=n\geq 3"> even if strong smoothing is needed.
   - `Data Cut`: Restricts the range of the Gaussian fit in scanning direction on the left and right. By default both values are 0.1, which means that 10% of data are reduced in both sides.
-  - `Window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=X_0\pm n\cdot H">, where <img src="https://render.githubusercontent.com/render/math?math=X_0">and <img src="https://render.githubusercontent.com/render/math?math=H"> are the offset and HPBW from Gaussian fitting, respectively .
+  - `Window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0\pm \rm{n}\cdot \rm{H}">, where <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0">and <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> are the offset and HPBW from Gaussian fitting, respectively .
   - `Scan Num.` starting and ending scans to be fitted.
 
 - buttons
+
+  - `browse`: locates raw FITS or fit format files
 
 - - `Cancel`: cancel the settings and close the fitting dialog
   - `Reset`: reset the fitting parameters
@@ -74,7 +76,29 @@ This is essentially powerful to minimize the influence of source confusion (or s
 
 ### pointing correction
 
-![dialog_pointing](demo/dialog_pointing.png)
+The expected amplitude is normally underestimated due to pointing erros of the antenna. The amplitude loss indueced by such pointing offests can be easily evaluated by a 2-D Gaussian function, in which the corrected amplitude is given by:
+
+ <img src="https://render.githubusercontent.com/render/math?math=A_{||}^{corr}=A_{||}^{obs}\cdot \exp(4\cdot ln2 \cdot \frac{X_{0\perp}^2}{H_{\perp}^2})\quad\quad\quad(\rm{Eq}.\,\, 2)">
+
+<img align="right" width="265" src="demo/dialog_pointing.png"> Where <img src="https://render.githubusercontent.com/render/math?math=\rm{A}_{||}^{corr}">: the corrected amplitude on scan direction AZ (EL)
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{A}_{||}^{obs}">: the observed amplitude on scan direction AZ (EL), equivelent to Gaussian parameter <img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{X}_{0\perp}"> : the pointing offset on scan direction EL (AZ), equivelent to Gaussian parameter <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> in Eq. 1
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{H}_{\perp}"> : the pointing offset on scan direction EL (AZ), equivelent to Gaussian parameter <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> in Eq. 1
+
+- parameter setup
+  - `Update Result`: whether or not to update the joined fitted files
+  - `Quality Control`: whether or not to perform data quality check for a subscan
+- parameters for quality control (only applies when the flag of `Quality Control` is swithed on, AKA, to 1):
+  - `Beam Width`: the expected beam width of the antenna at the observing frequency. A theoretical value will be given by clicking on the `Beam_Width` botton
+  - `D_Off`: pointing offset tolerance in arcsec, by deault it is set to 100, which means that a subscan with <img src="https://render.githubusercontent.com/render/math?math=|\rm{X}_0| \gt 100"> is considered as a bad scan
+  - `D_Width`:
+  - `Rela_Err`:
+  - `D_Symmetry`:
+  - `D_Avg`:
+- 
 
 
 
