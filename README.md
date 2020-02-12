@@ -43,7 +43,7 @@ Here the standard procedures for data calibration are listed.
 
 <img src="https://render.githubusercontent.com/render/math?math=F(x)=\sum_{i=0}^N A_i\cdot e^{4\cdot ln2\frac{-(x-X_0)^2}{H^2}} + K\cdot x %2B B\quad\quad\quad(\rm{Eq}.\,\, 1)">
 
-This is essentially powerful to minimize the influence of source confusion (or side lobe) and baseline drifting. <img align="right" width="265" src="demo/dialog_fitting.png">
+This is essentially powerful to minimize the influence of source confusion (or side lobe) and baseline drifting. <img align="right" width="320" src="demo/dialog_fitting.png">
 
 - data location:
   - `Raw`: the location of raw FITS data (click `Browse` to locate it)
@@ -51,6 +51,7 @@ This is essentially powerful to minimize the influence of source confusion (or s
 
 - parameter setup
 - `Amplitude`: initial guess of amplitude (<img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1)
+  
   - `Offset`: initial guess of offset (<img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> in Eq. 1)
   - `HPBW`: initial guess for antenna beam width (<img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> in Eq. 1)
   - `Tcal`: initial guess for baseline interception (<img src="https://render.githubusercontent.com/render/math?math=\rm{B}"> In Eq. 1), equivalent to the strength of injected noise diode in Kelven
@@ -60,8 +61,8 @@ This is essentially powerful to minimize the influence of source confusion (or s
   - `De-Noise`: factor (<img src="https://render.githubusercontent.com/render/math?math=n">) controlling the strength of data smoothing. If $n\neq 0$, the data is smoothed regressively with  piecewise cubic spline algorithm, data points over <img src="https://render.githubusercontent.com/render/math?math=n\times rms"> are filtered. The lower value of <img src="https://render.githubusercontent.com/render/math?math=n"> the stronger smoothing. It is recommended that <img src="https://render.githubusercontent.com/render/math?math=n\geq 3"> even if strong smoothing is needed.
   - `Data Cut`: Restricts the range of the Gaussian fit in scanning direction on the left and right. By default both values are 0.1, which means that 10% of data are reduced in both sides.
   - `window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0\pm \rm{n}\cdot \rm{H}">, where <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> and <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> are the offset and HPBW from Gassian fitting, respectively.
-  - `Scan Num.` starting and ending scans to be fitted.
-
+- `Scan Num.` starting and ending scans to be fitted.
+  
 - buttons
   - `browse`: locates raw FITS or fit format files
   - `Cancel`: cancel the settings and close the fitting dialog
@@ -77,7 +78,7 @@ The expected amplitude is normally underestimated due to pointing erros of the a
 
  <img src="https://render.githubusercontent.com/render/math?math=A_{||}^{corr}=A_{||}^{obs}\cdot \exp(4\cdot ln2 \cdot \frac{X_{0\perp}^2}{H_{\perp}^2})\quad\quad\quad(\rm{Eq}.\,\, 2)">
 
-<img align="right" width="265" src="demo/dialog_pointing.png"> Where <img src="https://render.githubusercontent.com/render/math?math=\rm{A}_{||}^{corr}">: the corrected amplitude on scan direction AZ (EL)
+<img align="right" width="220" src="demo/dialog_pointing.png"> Where <img src="https://render.githubusercontent.com/render/math?math=\rm{A}_{||}^{corr}">: the corrected amplitude on scan direction AZ (EL)
 
 <img src="https://render.githubusercontent.com/render/math?math=\rm{A}_{||}^{obs}">: the observed amplitude on scan direction AZ (EL), equivelent to Gaussian parameter <img src="https://render.githubusercontent.com/render/math?math=\rm{A}"> in Eq. 1
 
@@ -124,7 +125,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm
 
 
 
-<img align="right" width="265" src="demo/dialog_gain.png">
+<img align="right" width="195" src="demo/dialog_gain.png">
 
 
 
@@ -134,7 +135,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm
 
 
 
-<img align="right" width="265" src="demo/dialog_time.png">
+<img align="right" width="195" src="demo/dialog_time.png">
 
 
 
@@ -144,5 +145,5 @@ where <img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm
 
 
 
-<img align="right" width="265" src="demo/dialog_flux.png">
+<img align="right" width="195" src="demo/dialog_flux.png">
 
