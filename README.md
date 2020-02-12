@@ -2,9 +2,7 @@
 
 # DAARC
 
-DAARC: Data Analysis Application for Radio Continuum
-
-DAACR provides an end-to-end solution for radio continuum data from single dish cross-scan observation.
+`DAACR` (**D**ata **A**nalysis **A**pplication for **R**adio **C**ontinuum) provides an end-to-end solution for radio continuum data from single dish cross-scan observation.
 
 
 
@@ -63,11 +61,10 @@ This is essentially powerful to minimize the influence of source confusion (or s
   - `Data Cut`: Restricts the range of the Gaussian fit in scanning direction on the left and right. By default both values are 0.1, which means that 10% of data are reduced in both sides.
   - `window`: factor (n) defines the location of the first null of the antenna beam pattern. The location is calculated as <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0\pm \rm{n}\cdot \rm{H}">, where <img src="https://render.githubusercontent.com/render/math?math=\rm{X}_0"> and <img src="https://render.githubusercontent.com/render/math?math=\rm{H}"> are the offset and HPBW from Gassian fitting, respectively.
   - `Scan Num.` starting and ending scans to be fitted.
-- buttons
 
+- buttons
   - `browse`: locates raw FITS or fit format files
   - `Cancel`: cancel the settings and close the fitting dialog
-
   - `Reset`: reset the fitting parameters
   - `Go`: start Gaussian fitting
 
@@ -76,7 +73,7 @@ This is essentially powerful to minimize the influence of source confusion (or s
 
 ### pointing correction
 
-The expected amplitude is normally underestimated due to pointing erros of the antenna. The amplitude loss indueced by such pointing offests can be easily evaluated by a 2-D Gaussian function, in which the corrected amplitude is given by:
+The expected amplitude is normally underestimated due to pointing erros of the antenna. The amplitude loss indueced by such pointing offests can be evaluated by a 2-D Gaussian function, in which the corrected amplitude is given by:
 
  <img src="https://render.githubusercontent.com/render/math?math=A_{||}^{corr}=A_{||}^{obs}\cdot \exp(4\cdot ln2 \cdot \frac{X_{0\perp}^2}{H_{\perp}^2})\quad\quad\quad(\rm{Eq}.\,\, 2)">
 
@@ -92,31 +89,52 @@ The expected amplitude is normally underestimated due to pointing erros of the a
   - `Update Result`: whether or not to update the joined fitted files
   - `Quality Control`: whether or not to perform data quality check for a subscan
 - parameters for quality control (only applies when the flag of `Quality Control` is swithed on, AKA, to 1):
-  - `Beam Width`: the expected beam width of the antenna at the observing frequency. A theoretical value will be given by clicking on the `Beam_Width` botton
-  - `D_Off`: pointing offset tolerance in arcsec, by deault it is set to 100, which means that a subscan with <img src="https://render.githubusercontent.com/render/math?math=|\rm{X}_0| \gt 100"> is considered as a bad scan
-  - `D_Width`:
-  - `Rela_Err`:
-  - `D_Symmetry`:
-  - `D_Avg`:
-- 
+  - `Beam Width`: the expected beam width (<img src="https://render.githubusercontent.com/render/math?math=\rm{H}_\rm{expected}">) of the antenna at the observing frequency. A theoretical value will be given by clicking on the `Beam_Width` botton
+  - `D_Off`: tolerance of pointing offset in arcsec, by deault it is set to 100, which means that a subscan with <img src="https://render.githubusercontent.com/render/math?math=|\rm{X}_0| \gt 100"> is considered as a bad subscan. It is recommended that `D_Off` is set not higher than 1/6 of the antenna beam width.
+  - `D_Width`: factor (n) defines the tolerance of Gaussian parameter `H` as <img src="https://render.githubusercontent.com/render/math?math=\rm{n}\cdot \rm{H}_\rm{expected}">. If the Gaussian fitted `H` has <img src="https://render.githubusercontent.com/render/math?math=\rm{|H-H_expected|>n}\cdot \rm{H_expected}">, the subscan is regarded as a bad subscan.
+  - `Rela_Err`: factor (n) defines the torerance of the relative error of Gaussian parameter `A`. If the error of Gaussian amplitude (estimated by covariance) is higher than <img src="https://render.githubusercontent.com/render/math?math=\rm{n}\cdot \rm{A}">, the subscan is regarded as a bad subscan.
+  - `D_Symmetry`: factor (n) defines the tolerance of the symmetry of 2-D Gaussian. If <img src="https://render.githubusercontent.com/render/math?math=|\rm{A}_{\rm{AZ}}-\rm{A}_{\rm{EL}}|/(\rm{A}_{\rm{AZ}}%2B\rm{A}_{\rm{EL}})\geq 2\cdot \rm{n}">, the scan is regarded as a bad scan.
+  - `D_Avg`: factor (n) defines the tolerance of the individual Gaussian parameter `A` with repect to the averaged <img src="https://render.githubusercontent.com/render/math?math=\rm{A}_\rm{ave}"> (except the one that is subject to inspection). If <img src="https://render.githubusercontent.com/render/math?math=|\rm{A}-\rm{A}_\rm{ave}|/\rm{A}_\rm{ave} \geq \rm{n}">, the subscan is regarded as a bad subscan
 
-
+- buttons
+  - `Beam Width`: automatically caculate the expected beam width when the diameter of the antenna and the observing frequency are given
+  - `Cancel`: cancel the settings and close the pointing correction dialog
+  - `Reset`: reset the filled parameters
+  - `Go`: start pointing correction
 
 ### air opacity correction
 
-![dialog_tau](demo/dialog_tau.png)
+The atomosphere leads to an attenuation of the observed signal (significant at least for observations at frequencies above 15 GHz) by a factor of <img src="https://render.githubusercontent.com/render/math?math=e^{\tau\cdot \rm{AM}}">, where <img src="https://render.githubusercontent.com/render/math?math=\tau"> is the zenith opacity (which depends on the frequency) and <img src="https://render.githubusercontent.com/render/math?math=\rm{AM}=1/ \rm{sin(ELV)}"> the `airmass`. Hence, the following correction has to be applied to the data after pointing correction: <img align="right" width="265" src="demo/dialog_tau.png">
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{T}^{*}_\rm{A}=\rm{T}_\rm{A} \cdot e^{\tau \cdot \rm{AM}}">      
+
+To derive the actual opacity at a given time, the following relation could be used:
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm{sys}=\rm{T}_\rm{0}%2B\rm{T}_\rm{Atm} \cdot (1-e^{-\tau \cdot \rm{AM}}) \simeq \rm{T}_\rm{0}%2B\rm{T}_\rm{Atm} \cdot \tau \cdot \rm{AM} \quad\quad\quad(\rm{Eq}.\,\, 3)">
+
+where <img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm{ATM}"> is the atomospheric temperature, which could be calculated by the following approximation:
+
+<img src="https://render.githubusercontent.com/render/math?math=\rm{T}_\rm{ATM}=1.12 \cdot \rm{T}_\rm{ground}-50\rm{K} \simeq \rm{T}_\rm{ground}-17\rm{K}">
 
 
 
 ### gain-elevation correction
 
-![dialog_gain](demo/dialog_gain.png)
+
+
+
+
+<img align="right" width="265" src="demo/dialog_gain.png">
+
+
 
 
 
 ### gain-time correction
 
-![dialog_time](demo/dialog_time.png)
+
+
+<img align="right" width="265" src="demo/dialog_time.png">
 
 
 
@@ -124,5 +142,7 @@ The expected amplitude is normally underestimated due to pointing erros of the a
 
 ### absolute flux density conversion
 
-![dialog_flux](demo/dialog_flux.png)
+
+
+<img align="right" width="265" src="demo/dialog_flux.png">
 
